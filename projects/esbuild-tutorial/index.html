@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ESBUILD TUTORIAL</title>
+</head>
+
+<body>
+  <input type="number" id="input" value="20">
+  <div>
+    <button onclick="fibonacci(input.value)">calculate fibonacci</button>
+    <button onclick="fibonacci(input.value, true)">calculate fibonacci by worker</button>
+  </div>
+  <duv>
+    <label>Result: </label>
+    <span id="result"></span>
+  </duv>
+
+  <div>
+    <label>Interval: </label>
+    <span id="interval"></span>
+  </div>
+</body>
+<script type="module">
+  import { fibonacci, fibonacciInWorker } from "./dist/out.js";
+
+  window['fibonacci'] = async (n, useWorker) => {
+    const start = performance.now();
+    const result = useWorker ? (await fibonacciInWorker(n)) : fibonacci(n);
+    const end = performance.now();
+
+    document.getElementById('result').innerText = result;
+    document.getElementById('interval').innerText = `${end - start}ms`;
+  };
+</script>
+
+</html>

@@ -1,0 +1,20 @@
+{
+  "name": "esbuild-tutorial",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "tsx build.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "esbuild-plugin-webworker": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/node": "^20.9.0",
+    "esbuild": "^0.19.5",
+    "tsx": "^4.1.1"
+  }
+}
