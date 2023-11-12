@@ -1,0 +1,36 @@
+{
+  "name": "rollup-plugin-webworker",
+  "version": "0.0.1",
+  "description": "Rollup plugin to handler webworker",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "type": "module",
+  "scripts": {
+    "build": "tsx scripts/build.ts"
+  },
+  "keywords": [
+    "rollup",
+    "webworker",
+    "rollup plugin",
+    "rollup plugin webworker"
+  ],
+  "author": "zhangjunqiang",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/simo-an/bundle-plugins.git"
+  },
+  "homepage": "https://github.com/simo-an/bundle-plugins/tree/main/packages/rollup-plugin-webworker",
+  "bugs": {
+    "url": "https://github.com/simo-an/bundle-plugins/issues"
+  },
+  "dependencies": {
+    "@rollup/plugin-commonjs": "^25.0.7",
+    "@rollup/plugin-terser": "^0.4.4",
+    "rollup": "^4.4.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.9.0",
+    "typescript": "^5.2.2"
+  }
+}

@@ -1,4 +1,4 @@
-import createWorker from "./fib-worker.ts?worker";
+import createWorker from "./fib-worker.ts!worker";
 import { fib } from "./fib";
 
 const worker = createWorker();

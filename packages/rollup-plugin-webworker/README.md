@@ -1,42 +1,46 @@
-[npm]: https://img.shields.io/npm/v/esbuild-plugin-webworker
-[npm-url]: https://www.npmjs.com/package/esbuild-plugin-webworker
+[npm]: https://img.shields.io/npm/v/rollup-plugin-webworker
+[npm-url]: https://www.npmjs.com/package/rollup-plugin-webworker
 
 [![npm][npm]][npm-url]
 
-# esbuild-plugin-webworker
+# rollup-plugin-webworker
 
-🍣 An ESbuild plugin to handler webworker.
+🍣 A Rollup plugin to handler webworker.
 
 ## Requirements
 
-This plugin requires an [LTS](https://github.com/nodejs/Release) Node version (v14.0.0+) and ESbuild v0.18.0+.
+This plugin requires an [LTS](https://github.com/nodejs/Release) Node version (v14.0.0+) and Rollup v3.0.0+.
 
 ## Install
 
 Using pnpm:
 
 ```console
-pnpm add esbuild-plugin-webworker -D
+pnpm add rollup-plugin-webworker -D
 ```
 
 ## Usage
 
-### ESbuild Config
+### Rollup Config
 
 ```js
-import { build } from "esbuild";
-import webworker from "esbuild-plugin-webworker";
+import { defineConfig } from "rollup";
+import webworker from "rollup-plugin-webworker";
+// add ts support
+import typescript from "rollup-plugin-typescript2";
 
-build({
+export default defineConfig({
   /* ... */
-  plugins: [worker()],
+  plugins: [worker({
+    plugins: [ typescript() ]
+  )],
 });
 ```
 
 ### Worker Code
 
 ```ts
-// fib_worker.ts
+// fib-worker.ts
 self.onmessage = (e) => {
   const userNum = Number(e.data);
   const result = fib(userNum);
@@ -60,7 +64,7 @@ function fib(n: number): number {
 
 ```ts
 // main.ts
-import createWorker from "./fib_worker?worker";
+import createWorker from "./fib-worker?worker";
 
 const worker = createWorker();
 
@@ -105,14 +109,26 @@ The RegExp to match worker file.
 
 ### `minify`
 
-Type: `boolean`<br>
+Type: `boolean` <br>
 Default: `true`
 
 Whether to minify worker code.
 
 ### `keepImportName`
 
-Type: `boolean`<br>
+Type: `boolean` <br>
 Default: `false`
 
 Whether to remove the mark of web worker file.
+
+### `plugins`
+
+Type: `Array<Plugin>` <br>
+Default: `[]`
+
+Add plugins to handler worker code.
+
+`@rollup/plugin-commonjs` is built in. <br>
+`@rollup/plugin-terser` will be used when `minify` is `true`. <br>
+
+If you want to use typescript, please add typescript plugin manually.

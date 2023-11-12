@@ -6,6 +6,8 @@
   "scripts": {
     "esbuild-worker-build": "pnpm -F=./packages/esbuild-plugin-webworker run build",
     "esbuild-worker-demo": "pnpm -F=./projects/esbuild-tutorial run dev",
+    "rollup-worker-build": "pnpm -F=./packages/rollup-plugin-webworker run build",
+    "rollup-worker-demo": "pnpm -F=./projects/rollup-tutorial run dev",
     "format": "pnpm -F=./packages/* run format",
     "precommit": "pnpm -F=./packages/* run precommit",
     "preinstall": "only-allow pnpm"

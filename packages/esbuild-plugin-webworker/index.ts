@@ -46,7 +46,7 @@ function webworker(options?: Partial<WebWorkerPluginOptions>) {
     };
   }
 
-  function createContents(data: string, inline: boolean) {
+  function createContents(data: string) {
     return inline
       ? `
         function createWorker() {
@@ -105,7 +105,7 @@ function webworker(options?: Partial<WebWorkerPluginOptions>) {
       }
 
       return {
-        contents: createContents(data, inline),
+        contents: createContents(data),
       };
     } catch (e) {
       console.error("Could not build worker script:", e);

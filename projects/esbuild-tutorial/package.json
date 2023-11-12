@@ -11,10 +11,5 @@
   "license": "ISC",
   "dependencies": {
     "esbuild-plugin-webworker": "workspace:*"
-  },
-  "devDependencies": {
-    "@types/node": "^20.9.0",
-    "esbuild": "^0.19.5",
-    "tsx": "^4.1.1"
   }
 }
