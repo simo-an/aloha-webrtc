@@ -31,9 +31,13 @@ import typescript from "rollup-plugin-typescript2";
 
 export default defineConfig({
   /* ... */
-  plugins: [worker({
-    plugins: [ typescript() ]
-  )],
+  plugins: [
+    worker({
+      plugins: [ 
+        typescript() 
+      ]
+    })
+  ],
 });
 ```
 
@@ -42,8 +46,8 @@ export default defineConfig({
 ```ts
 // fib-worker.ts
 self.onmessage = (e) => {
-  const userNum = Number(e.data);
-  const result = fib(userNum);
+  const num = Number(e.data);
+  const result = fib(num);
 
   self.postMessage(result);
 };
