@@ -1,0 +1,42 @@
+{
+  "name": "bundle-plugins",
+  "version": "0.0.1",
+  "description": "ths plugins of esbuild and rollup",
+  "type": "module",
+  "scripts": {
+    "esbuild-worker-build": "pnpm -F=./packages/esbuild-plugin-webworker run build",
+    "esbuild-worker-demo": "pnpm -F=./projects/esbuild-tutorial run dev",
+    "format": "pnpm -F=./packages/* run format",
+    "precommit": "pnpm -F=./packages/* run precommit",
+    "preinstall": "only-allow pnpm"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "pnpm run precommit"
+    }
+  },
+  "engines": {
+    "node": ">=18.14.2",
+    "pnpm": ">=8.0.0"
+  },
+  "keywords": [
+    "bundle",
+    "bundle plugins",
+    "rollup",
+    "esbuild"
+  ],
+  "author": "zhangjunqiang",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "esbuild": "^0.19.2",
+    "husky": "^8.0.3",
+    "lint-staged": "^14.0.0",
+    "only-allow": "^1.1.1",
+    "prettier": "^3.0.2",
+    "rollup": "^3.28.0",
+    "tslib": "^2.6.2",
+    "tsx": "^3.12.7",
+    "typescript": "^5.1.6"
+  }
+}
