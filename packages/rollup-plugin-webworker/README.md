@@ -26,14 +26,15 @@ pnpm add rollup-plugin-webworker -D
 ```js
 import { defineConfig } from "rollup";
 import webworker from "rollup-plugin-webworker";
-// add ts support
+// change ts plugin
 import typescript from "rollup-plugin-typescript2";
 
 export default defineConfig({
   /* ... */
   plugins: [
     worker({
-      plugins: [typescript()],
+      ts: true,
+      tsPlugin: typescript(),
     }),
   ],
 });
