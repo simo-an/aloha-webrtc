@@ -50,7 +50,9 @@ function webworker(options?: Partial<WebWorkerPluginOptions>) {
     return inline
       ? `
         function createWorker() {
-          const blob = new Blob([\`${data}\`], { type: 'text/javascript' });
+          const blob = new Blob([atob(\`${btoa(
+            data
+          )}\`)], { type: 'text/javascript' });
           setTimeout(() => URL.revokeObjectURL(blob), 0);
           
           return new Worker(URL.createObjectURL(blob));

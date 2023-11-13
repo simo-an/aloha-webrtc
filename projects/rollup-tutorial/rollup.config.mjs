@@ -17,7 +17,8 @@ const config = defineConfig({
     webworker({
       filter: /!worker$/,
       inline: true,
-      minify: true,
+      useTerser: true,
+      useTs: true,
       tsPlugin: typescript()
     })
   ],

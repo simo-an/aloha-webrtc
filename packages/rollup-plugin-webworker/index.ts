@@ -1,5 +1,7 @@
 import { rollup, Plugin, PluginContext } from "rollup";
 import commonjs from "@rollup/plugin-commonjs";
+import json from "@rollup/plugin-json";
+import nodeResolve from "@rollup/plugin-node-resolve";
 import terser from "@rollup/plugin-terser";
 import typescript from "@rollup/plugin-typescript";
 
@@ -8,8 +10,10 @@ const PLUGIN_NAME = "web-worker";
 interface WebWorkerPluginOptions {
   inline: boolean;
   out: string;
-  minify: boolean;
-  ts: boolean;
+  useTerser: boolean;
+  useTs: boolean;
+  useNodeResolve: boolean;
+  useJson: boolean;
   filter: RegExp;
   keepImportName: boolean;
   plugins: Plugin[];
@@ -17,13 +21,17 @@ interface WebWorkerPluginOptions {
   commonjsPlugin?: Plugin;
   terserPlugin?: Plugin;
   tsPlugin?: Plugin;
+  nodeResolvePlugin?: Plugin;
+  jsonPlugin?: Plugin;
 }
 
 const defaultOptions: WebWorkerPluginOptions = {
   inline: true,
   out: "dist",
-  minify: true,
-  ts: true,
+  useTerser: true,
+  useTs: true,
+  useNodeResolve: false,
+  useJson: false,
   filter: /\?worker$/,
   keepImportName: false,
   plugins: [],
@@ -33,27 +41,37 @@ function webworker(options?: Partial<WebWorkerPluginOptions>) {
   const {
     inline,
     out,
-    minify,
-    ts,
+    useTerser,
+    useTs,
+    useNodeResolve,
+    useJson,
     filter,
     keepImportName,
     plugins,
     terserPlugin,
     tsPlugin,
     commonjsPlugin,
+    nodeResolvePlugin,
+    jsonPlugin,
   } = {
     ...defaultOptions,
     ...options,
   };
 
-  if (ts) {
-    plugins.unshift(tsPlugin || typescript());
+  plugins.unshift(commonjsPlugin || commonjs());
+
+  if (useJson) {
+    plugins.unshift(jsonPlugin || json());
   }
-  if (minify) {
+  if (useNodeResolve) {
+    plugins.unshift(nodeResolvePlugin || nodeResolve());
+  }
+  if (useTs) {
+    plugins.push(tsPlugin || typescript());
+  }
+  if (useTerser) {
     plugins.push(terserPlugin || terser());
   }
-
-  plugins.unshift(commonjsPlugin || commonjs());
 
   async function onResolveId(
     this: PluginContext,
@@ -106,7 +124,9 @@ function webworker(options?: Partial<WebWorkerPluginOptions>) {
     return inline
       ? `
         function createWorker() {
-          const blob = new Blob([\`${data}\`], { type: 'text/javascript' });
+          const blob = new Blob([atob(\`${btoa(
+            data
+          )}\`)], { type: 'text/javascript' });
           setTimeout(() => URL.revokeObjectURL(blob), 0);
           
           return new Worker(URL.createObjectURL(blob));

@@ -33,7 +33,8 @@ export default defineConfig({
   /* ... */
   plugins: [
     worker({
-      ts: true,
+      useTerser: true,
+      useTs: true,
       tsPlugin: typescript(),
     }),
   ],
@@ -111,19 +112,33 @@ Default: `/\?worker$/`
 
 The RegExp to match worker file.
 
-### `minify`
+### `useTerser`
 
 Type: `boolean` <br>
 Default: `true`
 
-Whether to minify worker code.
+Whether to use `@rollup/plugin-terser` to minify code.
 
-### `ts`
+### `useTs`
 
 Type: `boolean` <br>
 Default: `true`
 
-Whether to us typescript.
+Whether to use `@rollup/plugin-typescript`.
+
+### `useNodeResolve`
+
+Type: `boolean` <br>
+Default: `false`
+
+Whether to use `@rollup/plugin-node-resolve`.
+
+### `useJson`
+
+Type: `boolean` <br>
+Default: `false`
+
+Whether to use `@rollup/plugin-json`.
 
 ### `keepImportName`
 
@@ -140,8 +155,10 @@ Default: `[]`
 Add plugins to handler worker code.
 
 `@rollup/plugin-commonjs` is built in. <br>
-`@rollup/plugin-terser` will be used when `minify` is `true`. <br>
-`@rollup/plugin-typescript` will be used when `ts` is `true`. <br>
+`@rollup/plugin-terser` will be used when `useTerser` is `true`. <br>
+`@rollup/plugin-typescript` will be used when `useTs` is `true`. <br>
+`@rollup/plugin-node-resolve` will be used when `useNodeResolve` is `true`. <br>
+`@rollup/plugin-json` will be used when `useJson` is `true`. <br>
 
 In most cases you don't need to use this option.
 
@@ -157,7 +174,7 @@ You can use `commonjsPlugin` to change default commonjs plugin.
 Type: `Plugin` <br>
 Default: `@rollup/plugin-terser`
 
-Take effect when `minify` is `true`.
+Take effect when `useTerser` is `true`.
 
 You can use `terserPlugin` to change default terser plugin.
 
@@ -166,6 +183,24 @@ You can use `terserPlugin` to change default terser plugin.
 Type: `Plugin` <br>
 Default: `@rollup/plugin-typescript`
 
-Take effect when `ts` is `true`.
+Take effect when `useTs` is `true`.
 
 You can use `tsPlugin` to change default typescript plugin.
+
+### `nodeResolvePlugin`
+
+Type: `Plugin` <br>
+Default: `@rollup/plugin-node-resolve`
+
+Take effect when `useNodeResolve` is `true`.
+
+You can use `nodeResolvePlugin` to change default node-resolve plugin.
+
+### `jsonPlugin`
+
+Type: `Plugin` <br>
+Default: `@rollup/plugin-json`
+
+Take effect when `useJson` is `true`.
+
+You can use `jsonPlugin` to change default json plugin.
