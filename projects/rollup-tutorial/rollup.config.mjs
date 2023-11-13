@@ -18,9 +18,7 @@ const config = defineConfig({
       filter: /!worker$/,
       inline: true,
       minify: true,
-      plugins: [
-        typescript(),
-      ]
+      typescriptPlugin: typescript()
     })
   ],
 });

@@ -1,6 +1,7 @@
 import { rollup, Plugin, PluginContext } from "rollup";
 import commonjs from "@rollup/plugin-commonjs";
 import terser from "@rollup/plugin-terser";
+import typescript from "@rollup/plugin-typescript";
 
 const PLUGIN_NAME = "web-worker";
 
@@ -8,31 +9,51 @@ interface WebWorkerPluginOptions {
   inline: boolean;
   out: string;
   minify: boolean;
+  ts: boolean;
   filter: RegExp;
   keepImportName: boolean;
   plugins: Plugin[];
+
+  commonjsPlugin?: Plugin;
+  terserPlugin?: Plugin;
+  tsPlugin?: Plugin;
 }
 
 const defaultOptions: WebWorkerPluginOptions = {
   inline: true,
   out: "dist",
   minify: true,
+  ts: true,
   filter: /\?worker$/,
   keepImportName: false,
   plugins: [],
 };
 
 function webworker(options?: Partial<WebWorkerPluginOptions>) {
-  const { inline, out, minify, filter, keepImportName, plugins } = {
+  const {
+    inline,
+    out,
+    minify,
+    ts,
+    filter,
+    keepImportName,
+    plugins,
+    terserPlugin,
+    tsPlugin,
+    commonjsPlugin,
+  } = {
     ...defaultOptions,
     ...options,
   };
 
-  plugins.push(commonjs());
-
-  if (minify) {
-    plugins.push(terser());
+  if (ts) {
+    plugins.unshift(tsPlugin || typescript());
   }
+  if (minify) {
+    plugins.push(terserPlugin || terser());
+  }
+
+  plugins.unshift(commonjsPlugin || commonjs());
 
   async function onResolveId(
     this: PluginContext,
@@ -74,8 +95,6 @@ function webworker(options?: Partial<WebWorkerPluginOptions>) {
 
         chunk.code = `${out}/${chunk.fileName}`;
       }
-
-      console.warn("onLoad", chunk);
 
       return chunk;
     } finally {

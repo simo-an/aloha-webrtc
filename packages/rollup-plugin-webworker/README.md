@@ -33,10 +33,8 @@ export default defineConfig({
   /* ... */
   plugins: [
     worker({
-      plugins: [ 
-        typescript() 
-      ]
-    })
+      plugins: [typescript()],
+    }),
   ],
 });
 ```
@@ -102,7 +100,8 @@ Type: `string` <br>
 Default: `dist`
 
 Output path of worker file.
-Take effect when `inline` is `false.`
+
+Take effect when `inline` is `false`.
 
 ### `filter`
 
@@ -117,6 +116,13 @@ Type: `boolean` <br>
 Default: `true`
 
 Whether to minify worker code.
+
+### `ts`
+
+Type: `boolean` <br>
+Default: `true`
+
+Whether to us typescript.
 
 ### `keepImportName`
 
@@ -134,5 +140,31 @@ Add plugins to handler worker code.
 
 `@rollup/plugin-commonjs` is built in. <br>
 `@rollup/plugin-terser` will be used when `minify` is `true`. <br>
+`@rollup/plugin-typescript` will be used when `ts` is `true`. <br>
 
-If you want to use typescript, please add typescript plugin manually.
+In most cases you don't need to use this option.
+
+### `commonjsPlugin`
+
+Type: `Plugin` <br>
+Default: `@rollup/plugin-commonjs`
+
+You can use `commonjsPlugin` to change default commonjs plugin.
+
+### `terserPlugin`
+
+Type: `Plugin` <br>
+Default: `@rollup/plugin-terser`
+
+Take effect when `minify` is `true`.
+
+You can use `terserPlugin` to change default terser plugin.
+
+### `tsPlugin`
+
+Type: `Plugin` <br>
+Default: `@rollup/plugin-typescript`
+
+Take effect when `ts` is `true`.
+
+You can use `tsPlugin` to change default typescript plugin.
