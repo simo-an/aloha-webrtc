@@ -1,4 +1,5 @@
 import esbuild, { PluginBuild } from "esbuild";
+import raw from "esbuild-plugin-raw2";
 import worker from "esbuild-plugin-webworker";
 
 const plugins = [
@@ -8,6 +9,9 @@ const plugins = [
       build.onEnd(() => console.log("built finished!"));
     },
   },
+  raw({
+    filter: /\.(txt|glsl|fs)$/i,
+  }),
   worker({
     inline: true,
     filter: /\?worker$/,

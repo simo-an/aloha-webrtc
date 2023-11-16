@@ -1,3 +1,4 @@
+import raw from "rollup-plugin-raw";
 import webworker from "rollup-plugin-webworker";
 import typescript from "rollup-plugin-typescript2";
 import commonjs from "@rollup/plugin-commonjs";
@@ -12,6 +13,9 @@ const config = defineConfig({
     },
   ],
   plugins: [
+    raw({
+      filter: /\.txt$/i,
+    }),
     commonjs(),
     typescript(),
     webworker({

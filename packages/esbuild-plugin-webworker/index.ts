@@ -8,8 +8,8 @@ import esbuild, {
 } from "esbuild";
 import { dirname, basename, join } from "node:path";
 
-const PLUGIN_NAME = "web-worker";
-const PLUGIN_NAMESPACE = "WebWorker";
+const PLUGIN_NAME = "name:web-worker";
+const PLUGIN_NAMESPACE = "namespace:WebWorker";
 
 interface WebWorkerPluginOptions {
   inline: boolean;
@@ -110,7 +110,7 @@ function webworker(options?: Partial<WebWorkerPluginOptions>) {
         contents: createContents(data),
       };
     } catch (e) {
-      console.error("Could not build worker script:", e);
+      console.error("Handler worker file failed:", e);
     }
   }
 

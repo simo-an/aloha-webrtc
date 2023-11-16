@@ -1,5 +1,6 @@
 import createWorker from "./fib-worker.ts?worker";
 import { fib } from "./fib";
+import rawText from "./raw.txt";
 
 const worker = createWorker();
 
@@ -19,4 +20,4 @@ function fibonacci(n: number): number {
   return fib(n);
 }
 
-export { fibonacciInWorker, fibonacci };
+export { fibonacciInWorker, fibonacci, rawText };

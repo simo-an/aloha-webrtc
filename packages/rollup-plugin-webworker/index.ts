@@ -37,7 +37,7 @@ const defaultOptions: WebWorkerPluginOptions = {
   plugins: [],
 };
 
-function webworker(options?: Partial<WebWorkerPluginOptions>) {
+function webworker(options?: Partial<WebWorkerPluginOptions>): Plugin {
   const {
     inline,
     out,

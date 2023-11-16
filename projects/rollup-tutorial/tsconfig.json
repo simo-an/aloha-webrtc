@@ -1,5 +1,5 @@
 {
-  "include": ["index.ts", "worker.d.ts"],
+  "include": ["index.ts", "rollup.d.ts"],
   "compilerOptions": {
     "baseUrl": "./",
     "target": "esnext",

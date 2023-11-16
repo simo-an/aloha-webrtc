@@ -10,6 +10,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "esbuild-plugin-raw2": "workspace:*",
     "esbuild-plugin-webworker": "workspace:*"
   }
 }
