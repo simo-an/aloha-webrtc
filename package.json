@@ -4,12 +4,12 @@
   "description": "ths plugins of esbuild and rollup",
   "type": "module",
   "scripts": {
-    "esbuild-worker-build": "pnpm -F=./packages/esbuild-plugin-webworker run build",
-    "esbuild-raw-build": "pnpm -F=./packages/esbuild-plugin-raw run build",
-    "esbuild-demo": "pnpm -F=./projects/esbuild-tutorial run dev",
-    "rollup-worker-build": "pnpm -F=./packages/rollup-plugin-webworker run build",
-    "rollup-raw-build": "pnpm -F=./packages/rollup-plugin-raw run build",
-    "rollup-demo": "pnpm -F=./projects/rollup-tutorial run dev",
+    "build:esbuild-worker": "pnpm -F=./packages/esbuild-plugin-webworker run build",
+    "build:esbuild-raw": "pnpm -F=./packages/esbuild-plugin-raw run build",
+    "test:esbuild": "pnpm -F=./projects/esbuild-tutorial run dev",
+    "build:rollup-worker": "pnpm -F=./packages/rollup-plugin-webworker run build",
+    "build:rollup-raw": "pnpm -F=./packages/rollup-plugin-raw run build",
+    "test:rollup": "pnpm -F=./projects/rollup-tutorial run dev",
     "format": "pnpm -F=./packages/* run format",
     "precommit": "pnpm -F=./packages/* run precommit",
     "preinstall": "only-allow pnpm"

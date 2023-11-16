@@ -1,4 +1,8 @@
 declare module "*worker" {
-  const code: () => Worker;
-  export default code;
+  const createWorker: () => Worker;
+  export default createWorker;
+}
+declare module "*audio-worklet" {
+  const createAudioWorkletNode: () => AudioWorkletNode;
+  export default createAudioWorkletNode;
 }

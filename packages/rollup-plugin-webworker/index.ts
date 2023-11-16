@@ -4,59 +4,42 @@ import json from "@rollup/plugin-json";
 import nodeResolve from "@rollup/plugin-node-resolve";
 import terser from "@rollup/plugin-terser";
 import typescript from "@rollup/plugin-typescript";
+import {
+  DEFAULT_AUDIO_WORKLET_REGEXP,
+  DEFAULT_WEB_WORKER_REGEXP,
+  PLUGIN_NAME,
+  WorkerPluginOptions,
+  defaultOptions,
+} from "./worker/worker-storage";
+import {
+  onBuildAudioWorkletLoad,
+  onBuildWebWorkerLoad,
+  onResolveAudioWorkletId,
+  onResolveWebWorkerId,
+  onTransformAudioWorklet,
+  onTransformWebWorker,
+} from "./worker/worker-handler";
 
-const PLUGIN_NAME = "web-worker";
-
-interface WebWorkerPluginOptions {
-  inline: boolean;
-  out: string;
-  useTerser: boolean;
-  useTs: boolean;
-  useNodeResolve: boolean;
-  useJson: boolean;
-  filter: RegExp;
-  keepImportName: boolean;
-  plugins: Plugin[];
-
-  commonjsPlugin?: Plugin;
-  terserPlugin?: Plugin;
-  tsPlugin?: Plugin;
-  nodeResolvePlugin?: Plugin;
-  jsonPlugin?: Plugin;
-}
-
-const defaultOptions: WebWorkerPluginOptions = {
-  inline: true,
-  out: "dist",
-  useTerser: true,
-  useTs: true,
-  useNodeResolve: false,
-  useJson: false,
-  filter: /\?worker$/,
-  keepImportName: false,
-  plugins: [],
-};
-
-function webworker(options?: Partial<WebWorkerPluginOptions>): Plugin {
-  const {
-    inline,
-    out,
-    useTerser,
-    useTs,
-    useNodeResolve,
-    useJson,
-    filter,
-    keepImportName,
-    plugins,
-    terserPlugin,
-    tsPlugin,
-    commonjsPlugin,
-    nodeResolvePlugin,
-    jsonPlugin,
-  } = {
+function webworker(options?: Partial<WorkerPluginOptions>): Plugin {
+  const fullOptions = {
     ...defaultOptions,
     ...options,
-  };
+  } as WorkerPluginOptions;
+
+  const {
+    filter,
+    audioWorkletFilter,
+    plugins,
+    useJson,
+    useNodeResolve,
+    useTerser,
+    useTs,
+    commonjsPlugin,
+    jsonPlugin,
+    nodeResolvePlugin,
+    tsPlugin,
+    terserPlugin,
+  } = fullOptions;
 
   plugins.unshift(commonjsPlugin || commonjs());
 
@@ -78,73 +61,30 @@ function webworker(options?: Partial<WebWorkerPluginOptions>): Plugin {
     source: string,
     importer: string | undefined
   ) {
-    if (!filter.test(source)) {
-      return;
+    if (filter.test(source)) {
+      return onResolveWebWorkerId(this, source, importer, fullOptions);
     }
-
-    const entry = keepImportName ? source : source.replace(filter, "");
-    const resolved = await this.resolve(entry, importer);
-
-    if (!resolved) {
-      throw new Error(`Cannot find ${entry}`);
+    if (audioWorkletFilter.test(source)) {
+      return onResolveAudioWorkletId(this, source, importer, fullOptions);
     }
-
-    return `${resolved.id}?worker`;
   }
 
   async function onLoad(this: PluginContext, id: string) {
-    if (!defaultOptions.filter.test(id)) {
-      return;
+    if (DEFAULT_WEB_WORKER_REGEXP.test(id)) {
+      return onBuildWebWorkerLoad(id, fullOptions);
     }
-
-    const input = id.replace(defaultOptions.filter, "");
-    const bundle = await rollup({ input, plugins });
-
-    try {
-      const {
-        output: [chunk],
-      } = await bundle.generate({ format: "esm" });
-
-      if (!inline) {
-        await bundle.write({
-          file: `${out}/${chunk.fileName}`,
-          format: "esm",
-        });
-
-        chunk.code = `${out}/${chunk.fileName}`;
-      }
-
-      return chunk;
-    } finally {
-      bundle.close();
+    if (DEFAULT_AUDIO_WORKLET_REGEXP.test(id)) {
+      return onBuildAudioWorkletLoad(id, fullOptions);
     }
   }
 
-  function createContents(data: string) {
-    return inline
-      ? `
-        function createWorker() {
-          const blob = new Blob([atob(\`${btoa(
-            data
-          )}\`)], { type: 'text/javascript' });
-          setTimeout(() => URL.revokeObjectURL(blob), 0);
-          
-          return new Worker(URL.createObjectURL(blob));
-        }
-        export default createWorker;`
-      : `
-        function createWorker() {
-          return new Worker(\`${data.replaceAll("\\", "/")}\`);
-        }
-        export default createWorker;`;
-  }
-
-  function onTransform(this: PluginContext, code: string, id: string) {
-    if (!defaultOptions.filter.test(id)) {
-      return;
+  function onTransform(code: string, id: string) {
+    if (DEFAULT_WEB_WORKER_REGEXP.test(id)) {
+      return onTransformWebWorker(code, fullOptions);
     }
-
-    return createContents(code);
+    if (DEFAULT_AUDIO_WORKLET_REGEXP.test(id)) {
+      return onTransformAudioWorklet(code, fullOptions);
+    }
   }
 
   return {
