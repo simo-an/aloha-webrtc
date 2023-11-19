@@ -29,14 +29,16 @@ function webworker(options?: Partial<WorkerPluginOptions>) {
       return onBuildAudioWorkletResolve(args, fullOptions);
     });
     build.onLoad(
-      { filter, namespace: PLUGIN_NAMESPACE_WEBWORKER },
+      { filter: /.*/, namespace: PLUGIN_NAMESPACE_WEBWORKER },
       (args: OnLoadArgs) => {
+        console.warn(args.path);
+
         return onBuildWebWorkerLoad(args, fullOptions);
       }
     );
     build.onLoad(
       {
-        filter: audioWorkletFilter,
+        filter: /.*/,
         namespace: PLUGIN_NAMESPACE_AUDIO_WORKLET_NODE,
       },
       (args: OnLoadArgs) => {

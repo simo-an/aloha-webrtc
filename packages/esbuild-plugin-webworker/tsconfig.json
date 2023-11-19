@@ -1,7 +1,8 @@
 {
   "include": ["index.ts", "worker/**/*" ,"worker.d.ts"],
   "compilerOptions": {
-    "outDir": "./dist",
+    "outDir": "./temp",
+    "declarationDir": "./dist",
     "baseUrl": "./",
     "target": "esnext",
     "module": "esnext",

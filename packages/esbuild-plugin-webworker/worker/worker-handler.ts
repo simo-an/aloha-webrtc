@@ -6,36 +6,25 @@ import {
   PLUGIN_NAMESPACE_AUDIO_WORKLET_NODE,
 } from "./worker-storage";
 
-function onBuildWebWorkerResolve(
-  args: OnResolveArgs,
-  options: WorkerPluginOptions
-) {
+function onBuildWebWorkerResolve(args: OnResolveArgs, options: WorkerPluginOptions) {
   return {
-    path: options.keepImportName
-      ? args.path
-      : args.path.replace(options.filter, ""),
+    path: options.keepImportName ? args.path : args.path.replace(options.filter, ""),
     namespace: PLUGIN_NAMESPACE_WEBWORKER,
     pluginData: { importer: args.importer },
   };
 }
 
-function onBuildAudioWorkletResolve(
-  args: OnResolveArgs,
-  options: WorkerPluginOptions
-) {
+function onBuildAudioWorkletResolve(args: OnResolveArgs, options: WorkerPluginOptions) {
   return {
     path: options.keepImportName
       ? args.path
-      : args.path.replace(options.filter, ""),
+      : args.path.replace(options.audioWorkletFilter, ""),
     namespace: PLUGIN_NAMESPACE_AUDIO_WORKLET_NODE,
     pluginData: { importer: args.importer },
   };
 }
 
-async function onBuildWebWorkerLoad(
-  args: OnLoadArgs,
-  options: WorkerPluginOptions
-) {
+async function onBuildWebWorkerLoad(args: OnLoadArgs, options: WorkerPluginOptions) {
   const data = await onBuildLoad(args, options);
 
   if (!data) {
@@ -45,9 +34,7 @@ async function onBuildWebWorkerLoad(
   const contents = options.inline
     ? `
     function createWorker() {
-      const blob = new Blob([atob(\`${btoa(
-        data
-      )}\`)], { type: 'text/javascript' });
+      const blob = new Blob([atob(\`${btoa(data)}\`)], { type: 'text/javascript' });
       setTimeout(() => URL.revokeObjectURL(blob), 0);
       
       return new Worker(URL.createObjectURL(blob));
@@ -62,10 +49,7 @@ async function onBuildWebWorkerLoad(
   return { contents };
 }
 
-async function onBuildAudioWorkletLoad(
-  args: OnLoadArgs,
-  options: WorkerPluginOptions
-) {
+async function onBuildAudioWorkletLoad(args: OnLoadArgs, options: WorkerPluginOptions) {
   const data = await onBuildLoad(args, options);
 
   if (!data) {
@@ -75,9 +59,7 @@ async function onBuildAudioWorkletLoad(
   const contents = options.inline
     ? `
     async function createAudioWorkletNode(context, name) {
-      const blob = new Blob([atob(\`${btoa(
-        data
-      )}\`)], { type: 'text/javascript' });
+      const blob = new Blob([atob(\`${btoa(data)}\`)], { type: 'text/javascript' });
       await context.audioWorklet.addModule(URL.createObjectURL(blob));
       
       setTimeout(() => URL.revokeObjectURL(blob), 0);

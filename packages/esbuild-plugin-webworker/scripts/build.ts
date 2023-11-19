@@ -9,11 +9,18 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 
 async function buildProject() {
   rmSync(resolve(__dirname, "../dist"), { recursive: true, force: true });
-  execSync("tsc --project tsconfig.json");
+  execSync(
+    "npx esbuild index.ts --bundle --platform=node --packages=external --outfile=dist/index.js --format=esm"
+  );
+  execSync("npx tsc --project tsconfig.json");
+  execSync("rm -rf ./temp");
 }
 
 async function createPublishFile() {
-  copyFileSync(resolve(__dirname, "../README.md"), resolve(__dirname, "../dist/README.md"));
+  copyFileSync(
+    resolve(__dirname, "../README.md"),
+    resolve(__dirname, "../dist/README.md")
+  );
 
   const template = {
     name: pkg.name,
