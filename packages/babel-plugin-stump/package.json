@@ -1,0 +1,45 @@
+{
+  "name": "babel-plugin-stump",
+  "version": "0.0.1",
+  "description": "Babel plugin to build coverage",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "type": "module",
+  "scripts": {
+    "build": "tsx scripts/build.ts",
+    "coverage": "nyc report --reporter=text-lcov | coveralls",
+    "release": "babel src --out-dir lib",
+    "pretest": "standard && npm run release"
+  },
+  "keywords": [
+    "babel",
+    "stump",
+    "coverage",
+    "babel plugin"
+  ],
+  "author": "zhangjunqiang",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/simo-an/bundle-plugins.git"
+  },
+  "homepage": "https://github.com/simo-an/bundle-plugins/tree/main/packages/babel-plugin-stump",
+  "bugs": {
+    "url": "https://github.com/simo-an/bundle-plugins/issues"
+  },
+  "dependencies": {
+    "@babel/helper-plugin-utils": "^7.22.5",
+    "@istanbuljs/load-nyc-config": "^1.1.0",
+    "@istanbuljs/schema": "^0.1.3",
+    "istanbul-lib-instrument": "^6.0.1",
+    "test-exclude": "^6.0.0"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.23.4",
+    "@babel/core": "^7.23.3",
+    "@babel/plugin-transform-modules-commonjs": "^7.23.3",
+    "@babel/register": "^7.22.15",
+    "coveralls": "^3.1.1",
+    "nyc": "^15.1.0"
+  }
+}

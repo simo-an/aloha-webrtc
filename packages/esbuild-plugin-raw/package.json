@@ -20,7 +20,7 @@
     "type": "git",
     "url": "git+https://github.com/simo-an/bundle-plugins.git"
   },
-  "homepage": "https://github.com/simo-an/bundle-plugins/tree/main/packages/esbuild-plugin-raw2",
+  "homepage": "https://github.com/simo-an/bundle-plugins/tree/main/packages/esbuild-plugin-raw",
   "bugs": {
     "url": "https://github.com/simo-an/bundle-plugins/issues"
   },
