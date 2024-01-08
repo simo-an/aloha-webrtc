@@ -25,7 +25,7 @@ interface WebWorkerPluginOptions {
   jsonPlugin?: Plugin;
 }
 
-const defaultOptions: WebWorkerPluginOptions = {
+const getDefaultOptions = (): WebWorkerPluginOptions => ({
   inline: true,
   out: "dist",
   useTerser: true,
@@ -35,9 +35,11 @@ const defaultOptions: WebWorkerPluginOptions = {
   filter: /\?worker$/,
   keepImportName: false,
   plugins: [],
-};
+});
 
 function webworker(options?: Partial<WebWorkerPluginOptions>): Plugin {
+  const defaultOptions = getDefaultOptions();
+
   const {
     inline,
     out,

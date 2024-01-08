@@ -1,4 +1,4 @@
 declare module "*worker" {
-  const code: () => Worker;
-  export default code;
+  const createWorker: () => Worker;
+  export default createWorker;
 }
